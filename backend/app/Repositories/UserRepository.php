@@ -3,27 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository
 {
-    public function getAllUsers(): Collection
+    public function createUser(array $newUser): User
     {
-        return User::all();
+        return User::create($newUser);
     }
 
-    public function getUserById(int $userId): User
+    public function updateUser(User $user, array $newUser): User
     {
-        return User::find($userId);
-    }
-
-    public function createUser(array $user): User
-    {
-        return User::create($user);
-    }
-
-    public function updateUser(int $userId, array $user): User
-    {
-        return tap(User::where('id', $userId))->update($user)->first();
+        $user->update($newUser);
+        return $user->fresh();
     }
 }
