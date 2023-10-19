@@ -26,13 +26,13 @@ class LoginService
         return Auth::attempt($validator->validated()) ? $this->sucess([
             'user' => new UserResource(Auth::user()),
             'token' => Auth::user()->createToken('Personal Token')->plainTextToken,
-        ]) : $this->failure("Wrong email or password");
+        ]) : $this->failure(__('auth.failed'));
     }
 
     public function logout(Request $request): JsonResponse
     {
         Auth::user()->currentAccessToken()->delete();
 
-        return $this->sucess("Logged out");
+        return $this->sucess(__('auth.logout'));
     }
 }
