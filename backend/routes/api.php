@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,4 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('user', UserController::class)->except(['create', 'edit', 'destroy']);
+Route::post('login', [LoginController::class, 'login']);
+Route::post('user', [UserController::class, 'store']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('user', [UserController::class, 'show']);
+    Route::put('user', [UserController::class, 'update']);
+    Route::post('logout', [LoginController::class, 'logout']);
+});
