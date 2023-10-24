@@ -15,7 +15,3 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
     </n-message-provider>
   </n-dialog-provider>
 </template>
-
-<style scoped lang="scss">
-
-</style>

@@ -20,6 +20,7 @@ declare module 'vue' {
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCol: typeof import('naive-ui')['NCol']
+    NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
@@ -32,6 +33,7 @@ declare module 'vue' {
     NStatistic: typeof import('naive-ui')['NStatistic']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SignInComponent: typeof import('./src/components/SignInComponent.vue')['default']
     SignUpComponent: typeof import('./src/components/SignUpComponent.vue')['default']
   }
 }

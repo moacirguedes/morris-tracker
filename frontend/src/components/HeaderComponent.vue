@@ -1,12 +1,61 @@
 <script setup lang="ts">
+import {useAuthStore} from "@/stores/auth";
+import type {Component} from "vue";
+import {h} from "vue";
+import {NIcon} from 'naive-ui'
+import {
+  PersonCircle12Regular as UserIcon,
+  PersonEdit20Regular as EditIcon,
+  SignOut20Regular as LogoutIcon
+} from '@vicons/fluent'
+
+const auth = useAuthStore()
+
+const renderIcon = (icon: Component) => {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon)
+    })
+  }
+}
+
+const options = [
+  {
+    label: 'Profile',
+    icon: renderIcon(UserIcon)
+  },
+  {
+    label: 'Edit Profile',
+    icon: renderIcon(EditIcon)
+  },
+  {
+    label: 'Logout',
+    icon: renderIcon(LogoutIcon),
+    props: {
+      onClick: () => {
+        auth.logout()
+      }
+    }
+  }
+]
 </script>
 
 <template>
   <n-page-header>
     <template #default>
-      <nav class="teste">
+      <nav v-if="auth.loginStatus()">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <n-divider vertical />
+        <RouterLink :to="{name: 'about'}">About</RouterLink>
+        <n-divider vertical />
+        <n-dropdown :options="options">
+          <n-button :bordered="false" style="padding: 0 4px">· · ·</n-button>
+        </n-dropdown>
+      </nav>
+      <nav v-if="!auth.loginStatus()">
+        <RouterLink :to="{name: 'login'}">Login</RouterLink>
+        <n-divider vertical />
+        <RouterLink :to="{name: 'register'}">Register</RouterLink>
       </nav>
     </template>
   </n-page-header>
@@ -15,10 +64,9 @@
 <style scoped lang="scss">
 
 nav {
-  width: 100%;
-  font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  font-size: 20px;
+  padding: 1rem 0;
 }
 
 nav a.router-link-exact-active {
@@ -29,35 +77,4 @@ nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>

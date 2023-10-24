@@ -5,15 +5,12 @@ import {
   type FormItemRule,
   type FormRules,
   type FormValidationError,
-  useLoadingBar,
-  useMessage
 } from 'naive-ui'
 import type {UserType} from "@/models/UserInterface";
-import {postUser} from "@/services/ApiService";
+import {useAuthStore} from "@/stores/auth";
 
+const auth = useAuthStore()
 const formSignUp = ref<FormInst | null>(null)
-const message = useMessage()
-const loadingBar = useLoadingBar()
 const userRef = ref<UserType>({
   name: null,
   email: null,
@@ -42,9 +39,7 @@ const rules: FormRules = {
     {
       required: true,
       validator(rule: FormItemRule, value: string) {
-        if (!value) {
-          return new Error('E-mail is required')
-        } else if (RegExp('^[a-zA-Z0-9._-]+@([a-zA-Z0-9.-]+.)+[a-zA-Z]{2,4}$').test(value)) {
+        if (!RegExp('^[a-zA-Z0-9._-]+@([a-zA-Z0-9.-]+.)+[a-zA-Z]{2,4}$').test(value)) {
           return new Error('Invalid e-mail')
         }
         return true
@@ -85,25 +80,16 @@ const autoCompleteOptions = computed(() => {
 
 function handleValidateButtonClick(e: MouseEvent) {
   e.preventDefault()
-  loadingBar.start()
   formSignUp.value?.validate((errors: Array<FormValidationError> | undefined) => {
     if (!errors) {
-      postUser(userRef.value).then(response => {
-        if (response.success) {
-          loadingBar.finish()
-          console.log(response)
-        } else {
-          loadingBar.error()
-          console.log(response)
-        }
-      })
+      auth.register(userRef.value)
     }
   })
 }
 </script>
 
 <template>
-  <n-card title="Login">
+  <n-card title="Register">
     <n-form ref="formSignUp" :model="userRef" :rules="rules">
       <n-form-item path="name" label="Name">
         <n-input v-model:value="userRef.name" @keydown.enter.prevent/>

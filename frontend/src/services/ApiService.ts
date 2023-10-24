@@ -1,13 +1,21 @@
 import HttpService from "@/services/HttpService";
-import type {UserType} from "@/models/UserInterface";
-import type {ApiInterface} from "@/models/ApiInterface";
+import type {LoginType, UserType} from "@/models/UserInterface";
+import type {ApiType} from "@/models/ApiInterface";
 
-export const postUser = async (user: UserType): Promise<ApiInterface|any> => {
+export const postUser = async (user: UserType): Promise<ApiType> => {
     try {
         const {data} = await HttpService.post('user', user)
         return data
+    } catch (e) {
+        throw new Error(`Api request failed with errors: ${e}`)
     }
-    catch (e) {
-        return e
+}
+
+export const loginUser = async (user: LoginType): Promise<ApiType> => {
+    try {
+        const {data} = await HttpService.post('login', user)
+        return data
+    } catch (e) {
+        throw new Error(`Api request failed with errors: ${e}`)
     }
 }
